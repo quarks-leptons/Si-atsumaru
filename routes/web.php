@@ -17,4 +17,20 @@ Route::get('/', function () {
 
 Auth::routes();
 
+// Dashboard
 Route::get('/home', 'HomeController@index');
+
+// Customers
+Route::get('/customer', 'CustomerController@index');
+Route::get('/customer/{id}', 'CustomerController@detail')->where('id', '[0-9]+');;
+
+// Inventories
+
+
+// Activities
+
+
+// Menus
+
+
+// POS
