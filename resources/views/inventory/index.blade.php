@@ -3,12 +3,26 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12 col-md-offset-0">
             <div class="panel panel-default">
                 <div class="panel-heading">Inventory</div>
-
+                @foreach ($inventories as $inventory)
                 <div class="panel-body">
-                    You are in Inventory Index!
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{$inventory->name}}
+                        </div>
+                        <div class="col-md-1"> 
+                            {{$inventory->stock}}
+                        </div>
+                        <div class="col-md-1"> 
+                            {{$inventory->price}}
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+                <div class="panel-body">
+
                 </div>
             </div>
         </div>

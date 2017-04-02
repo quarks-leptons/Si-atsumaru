@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Inventory;
 
 class InventoryController extends Controller
 {
@@ -21,9 +22,29 @@ class InventoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('inventory.index');
+        $inventories = Inventory::all();
+        return view('inventory.index')->with("inventories",$inventories);
+    }
+
+    public function addInventory(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required|max:190',
+            'stock' => 'required|max:100000000',
+            'price' => 'required|max:100000000'
+        ]);
+
+        $inventory_data = collect($request->only([
+            'name',
+            'stock',
+            'price'
+        ]));
+
+        $inven = Inventory::create($inventory_data);
+
+        return redirect()->action("InventoryController@index");
     }
 
     /**
