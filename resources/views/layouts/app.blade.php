@@ -43,11 +43,16 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        <li><a href="{{ route('home') }}">Home</a></li>
-                        <li><a href="{{ route('order') }}">Activity</a></li>
-                        <li><a href="{{ route('customer') }}">Customer</a></li>
-                        <li><a href="{{ route('inventory') }}">Inventory</a></li>
-                        <li><a href="{{ route('menu') }}">Menu</a></li>
+                        @if (Auth::guest())
+                            
+                        @else
+                            <li><a href="{{ route('menu') }}">Menu</a></li>
+                            <li><a href="{{ route('home') }}">Home</a></li>
+                            <li><a href="{{ route('order') }}">Activity</a></li>
+                            <li><a href="{{ route('customer') }}">Customer</a></li>
+                            <li><a href="{{ route('inventory') }}">Inventory</a></li>
+
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
