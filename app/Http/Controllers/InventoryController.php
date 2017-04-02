@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Inventory;
+use Validator;
+
 
 class InventoryController extends Controller
 {
@@ -30,17 +32,23 @@ class InventoryController extends Controller
 
     public function addInventory(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|max:190',
-            'stock' => 'required|max:100000000',
-            'price' => 'required|max:100000000'
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:40',
+            'stock' => 'required|max:1000000',
+            'price' => 'required|max:1000000'
         ]);
+
+       if ($validator->fails()) {
+            return redirect('/')
+                ->withInput()
+                ->withErrors($validator);
+        }
 
         $inventory_data = collect($request->only([
             'name',
             'stock',
             'price'
-        ]));
+        ]))->all();
 
         $inven = Inventory::create($inventory_data);
 

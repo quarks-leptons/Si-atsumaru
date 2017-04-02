@@ -27,6 +27,7 @@ Route::get('/customer/{id}', 'CustomerController@detail')->where('id', '[0-9]+')
 // Inventories
 Route::get('/inventory', 'InventoryController@index')->name('inventory');
 Route::get('/inventory/{id}', 'InventoryController@detail')->where('id', '[0-9]+');
+Route::post('inventory/add','InventoryController@addInventory');
 
 // Activities (Orders)
 Route::get('/order', 'OrderController@index')->name('order');
