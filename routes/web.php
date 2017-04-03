@@ -23,6 +23,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 // Customers
 Route::get('/customer', 'CustomerController@index')->name('customer');
 Route::get('/customer/{id}', 'CustomerController@detail')->where('id', '[0-9]+');
+Route::post('customer/add','CustomerController@addCustomer');
 
 // Inventories
 Route::get('/inventory', 'InventoryController@index')->name('inventory');

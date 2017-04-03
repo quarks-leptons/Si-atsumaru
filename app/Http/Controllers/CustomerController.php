@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Customer;
+use Validator;
 
 class CustomerController extends Controller
 {
@@ -21,9 +23,40 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    /**
+     * Show the inventory index
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
     {
-        return view('customer.index');
+        $customers = Customer::all();
+        return view('customer.index')->with("customers",$customers);
+    }
+
+    public function addCustomer(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:40',
+            'email' => 'email|max:1000000',
+            'address' => 'max:1000000'
+        ]);
+
+       if ($validator->fails()) {
+            return redirect('/')
+                ->withInput()
+                ->withErrors($validator);
+        }
+
+        $customer_data = collect($request->only([
+            'name',
+            'email',
+            'address'
+        ]))->all();
+
+        $customer = Customer::create($customer_data);
+
+        return redirect()->action("CustomerController@index");
     }
 
     /**

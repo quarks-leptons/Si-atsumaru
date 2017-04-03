@@ -12,4 +12,5 @@ class Customer extends Model
      * @var string
      */
     protected $table = 'customers';
+    protected $fillable = ['name', 'email', 'address'];
 }
