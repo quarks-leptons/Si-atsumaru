@@ -1,6 +1,6 @@
 <button type="button" class="btn btn-info btn-xs" data-toggle='modal' data-target="#myModal{{$id}}" 
 data-invenId="{{ $id }}" data-name="{{ $name }}" data-stock="{{ $stock }}" data-price="{{ $price }}">
-  Edit {{$id}} {{$name}}
+  Edit
 </button>
 
 <!-- Modal -->
