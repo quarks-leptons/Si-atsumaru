@@ -59,6 +59,27 @@ class CustomerController extends Controller
         return redirect()->action("CustomerController@index");
     }
 
+    public function editCustomer(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|max:1000000',
+            'name' => 'required|max:40',
+            'email' => 'email|max:1000000',
+            'address' => 'max:1000000'
+        ]);
+
+        $customer = Customer::Find($request->id);
+
+        $updates = [
+        'name' => $request->name,
+        'email' => $request->email,
+        'address' => $request->address
+        ];
+
+        $customer->update($updates);
+
+        return redirect()->action("CustomerController@index");
+    }
     /**
      * Show the acustomer detail
      *

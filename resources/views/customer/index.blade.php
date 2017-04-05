@@ -55,7 +55,7 @@
                                     <strong>{{ $errors->first('address') }}</strong>
                                 </span>
                             @endif
-                            <input type=submit class="btn btn-primary" value="Add Inventory"/>
+                            <input type=submit class="btn btn-primary" value="Add Customer"/>
                         </form>
                     </div>  
 
@@ -67,20 +67,28 @@
                             <div class="col-md-4"> 
                                 <b>Email</b>
                             </div>
-                            <div class="col-md-4"> 
+                            <div class="col-md-2"> 
                                 <b>Address</b>
                             </div>
                         </div>
                     @foreach ($customers as $customer)
-                        <div class="row inventory-card" >
+                        <div class="row customer-card" >
                             <div class="col-md-4">
                                 {{$customer->name}}
                             </div>
                             <div class="col-md-4"> 
                                 {{$customer->email}}
                             </div>
-                            <div class="col-md-4"> 
+                            <div class="col-md-2"> 
                                 {{$customer->address}}
+                            </div>
+                            <div class="col-md-2">
+                                @include('customer.edit_customer',[
+                                    "id" => $customer->id,
+                                    "name" => $customer->name,
+                                    "email" => $customer->email,
+                                    "address" => $customer->address,
+                                ])
                             </div>
                         </div>
                     @endforeach
@@ -101,7 +109,7 @@
             var search_term = e.target.value.toLowerCase()
 
             console.log('Searching: '+search_term)
-            $(".inventory-card").each(function(index) {
+            $(".customer-card").each(function(index) {
                 var customer_name = $( this ).text().toLowerCase()
                 if(customer_name.includes(search_term)) {
                     $(this).show()
