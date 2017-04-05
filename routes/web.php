@@ -24,11 +24,13 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/customer', 'CustomerController@index')->name('customer');
 Route::get('/customer/{id}', 'CustomerController@detail')->where('id', '[0-9]+');
 Route::post('customer/add','CustomerController@addCustomer');
+Route::post('customer/edit','CustomerController@editCustomer');
 
 // Inventories
 Route::get('/inventory', 'InventoryController@index')->name('inventory');
 Route::get('/inventory/{id}', 'InventoryController@detail')->where('id', '[0-9]+');
 Route::post('inventory/add','InventoryController@addInventory');
+Route::post('inventory/edit','InventoryController@editInventory');
 
 // Activities (Orders)
 Route::get('/order', 'OrderController@index')->name('order');

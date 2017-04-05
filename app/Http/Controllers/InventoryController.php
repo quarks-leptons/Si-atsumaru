@@ -55,6 +55,28 @@ class InventoryController extends Controller
         return redirect()->action("InventoryController@index");
     }
 
+    public function editInventory(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|max:1000000',
+            'name' => 'required|max:40',
+            'stock' => 'required|max:1000000',
+            'price' => 'required|max:1000000'
+        ]);
+
+        $inventory = Inventory::Find($request->id);
+
+        $updates = [
+        'name' => $request->name,
+        'stock' => $request->stock,
+        'price' => $request->price
+        ];
+
+        $inventory->update($updates);
+
+        return redirect()->action("InventoryController@index");
+    }
+
     /**
      * Show the inventory detail
      *
