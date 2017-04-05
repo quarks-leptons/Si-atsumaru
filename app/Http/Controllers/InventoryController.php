@@ -39,7 +39,7 @@ class InventoryController extends Controller
         ]);
 
        if ($validator->fails()) {
-            return redirect('/')
+            return redirect('/inventory')
                 ->withInput()
                 ->withErrors($validator);
         }

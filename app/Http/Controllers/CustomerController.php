@@ -43,7 +43,7 @@ class CustomerController extends Controller
         ]);
 
        if ($validator->fails()) {
-            return redirect('/')
+            return redirect('/customer')
                 ->withInput()
                 ->withErrors($validator);
         }
