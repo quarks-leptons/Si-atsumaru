@@ -3,15 +3,152 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12 col-md-offset-0">
             <div class="panel panel-default">
-                <div class="panel-heading">Menu</div>
+                <div class="panel-heading"><h3>Menu</h3></div>
+
 
                 <div class="panel-body">
-                    You are in Menu Index!
+
+                    <div class="col-md-12">
+                        <h4>Add New Menu</h4>
+                        <form class="form-horizontal" role="form" method="POST" action="{{action('MenuController@addMenu')}}" onkeydown="validate_enter(event)">
+                            <input name="_token" type="hidden" value="{{ csrf_token() }}"/>                            
+                            <div class=form-group>
+                                <label for="name" class="col-md-2">Name</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" type="text" name="name" />
+                                </div>
+                            </div>
+                            @if ($errors->has('name'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('name') }}</strong>
+                                </span>
+                            @endif
+
+                            <div class=form-group>
+                                <label for="stock" class="col-md-2">Stock</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" type="number" name="stock" />
+                                </div>
+                            </div>
+                            @if ($errors->has('stock'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('name') }}</strong>
+                                </span>
+                            @endif
+
+                            <div class=form-group>
+                                <label for="name" class="col-md-2">Price</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" type="number" name="price" />
+                                </div>
+                            </div>
+                            @if ($errors->has('price'))
+                                <span class="help-block">
+                                    <strong>{{ $errors->first('price') }}</strong>
+                                </span>
+                            @endif
+
+                            <div class=form-group>
+                                <label for="name" class="col-md-2">Made of</label>
+                                <div class="col-md-10" style="border: 1px solid; padding:10px;">
+                                    <div class="col-md-12">
+                                        <input id="madeof_name" type="text" class="form-control input-sm" name="madeof_name" onkeydown="validate_madeof(event)" autocomplete="off">
+                                    </div>
+                                    @foreach ($inventories as $inventori)
+                                        <div class="inventori" style="display: inline-block; position: relative; margin:10px;">
+                                            <input type="checkbox" value="{{ $inventori->id }}" name="madeof[]"> {{ $inventori->name }}
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <input type=submit class="btn btn-primary" value="Add Inventory"/>
+                        </form>
+                        </br>
+                    </div>  
+
+                    <div class="row">
+                    <label for="menu_name" class="col-md-2 control-label">Search Menu</label>
+                        <div class="col-md-10">
+                            <input id="menu_name" type="text" class="form-control" name="menu_name" onkeydown="validate(event)" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        </br>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <b>Name</b>
+                                </div>
+                                <div class="col-md-4"> 
+                                    <b>Stock</b>
+                                </div>
+                                <div class="col-md-4"> 
+                                    <b>Price</b>
+                                </div>
+                            </div>
+                        @foreach ($menus as $menu)
+                            <div class="row menus-card" >
+                                <div class="col-md-4">
+                                    {{$menu->name}}
+                                </div>
+                                <div class="col-md-4"> 
+                                    {{$menu->stock}}
+                                </div>
+                                <div class="col-md-4"> 
+                                    {{$menu->price}}
+                                </div>
+                            </div>
+                        @endforeach
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    function validate(e) {
+        if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
+            var search_term = e.target.value.toLowerCase()
+
+            console.log('Searching: '+search_term)
+            $(".menus-card").each(function(index) {
+                var menu_name = $( this ).text().toLowerCase()
+                if(menu_name.includes(search_term)) {
+                    $(this).show()
+                }
+                else {
+                    $(this).hide()   
+                }
+            });
+        }
+    }
+
+    function validate_madeof(e) {
+        if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
+            var search_term = e.target.value.toLowerCase()
+
+            console.log('Searching: '+search_term)
+            $(".inventori").each(function(index) {
+                var inv_name = $( this ).text().toLowerCase()
+                if(inv_name.includes(search_term)) {
+                    $(this).show()
+                }
+                else {
+                    $(this).hide()   
+                }
+            });
+        }
+    }
+     function validate_enter(e) {
+        if(e.keyCode == 13) {
+          e.preventDefault();
+          return false;
+        }
+    }
+</script>
 @endsection

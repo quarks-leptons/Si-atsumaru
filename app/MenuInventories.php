@@ -12,4 +12,9 @@ class MenuInventories extends Model
      * @var string
      */
     protected $table = 'menus_inventories';
+    protected $primaryKey = 'id';
+	protected $fillable = [
+		'menu_id',
+		'inventory_id'
+	];
 }

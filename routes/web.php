@@ -37,6 +37,7 @@ Route::get('/order/{id}', 'OrderController@detail')->where('id', '[0-9]+');
 // Menus
 Route::get('/menu', 'MenuController@index')->name('menu');
 Route::get('/menu/{id}', 'MenuController@detail')->where('id', '[0-9]+');
+Route::post('menu/add','MenuController@addMenu');
 
 // POS
 Route::get('/pos', 'POSController@index')->name('pos');

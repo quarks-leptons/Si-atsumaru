@@ -12,4 +12,11 @@ class Menu extends Model
      * @var string
      */
     protected $table = 'menus';
+    protected $primaryKey = 'id';
+	protected $fillable = [
+		'inventory_id',
+		'name',
+		'stock',
+		'price'
+	];
 }
