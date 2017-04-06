@@ -12,6 +12,10 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/font-awesome.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/pos.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/selectize.css') }}" rel="stylesheet">
 
     <!-- Scripts -->
     <script>
@@ -46,12 +50,12 @@
                         @if (Auth::guest())
                             
                         @else
-                            <li><a href="{{ route('menu') }}">Menu</a></li>
                             <li><a href="{{ route('home') }}">Home</a></li>
+                            <li><a href="{{ route('menu') }}">Menu</a></li>
                             <li><a href="{{ route('order') }}">Activity</a></li>
                             <li><a href="{{ route('customer') }}">Customer</a></li>
                             <li><a href="{{ route('inventory') }}">Inventory</a></li>
-
+                            <li><a href="{{ route('promotion') }}">Promotion</a></li>
                         @endif
                     </ul>
 
@@ -93,5 +97,6 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    @yield('scripts')
 </body>
 </html>

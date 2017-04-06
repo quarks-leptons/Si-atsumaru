@@ -41,5 +41,10 @@ Route::get('/menu', 'MenuController@index')->name('menu');
 Route::get('/menu/{id}', 'MenuController@detail')->where('id', '[0-9]+');
 Route::post('menu/add','MenuController@addMenu');
 
+// Promotions
+Route::get('/promotion', 'PromotionController@index')->name('promotion');
+Route::get('/promotion/{id}', 'PromotionController@detail')->where('id', '[0-9]+');
+
 // POS
 Route::get('/pos', 'POSController@index')->name('pos');
+
