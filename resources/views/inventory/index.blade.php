@@ -61,7 +61,7 @@
 
                     <div class="col-md-6">
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-7">
                                 <b>Name</b>
                             </div>
                             <div class="col-md-2"> 
@@ -73,7 +73,7 @@
                         </div>
                     @foreach ($inventories as $inventory)
                         <div class="row inventory-card" >
-                            <div class="col-md-8">
+                            <div class="col-md-7">
                                 {{$inventory->name}}
                             </div>
                             <div class="col-md-2"> 
@@ -81,6 +81,14 @@
                             </div>
                             <div class="col-md-2"> 
                                 {{$inventory->price}}
+                            </div>
+                            <div class="col-md-1">
+                                @include('inventory.edit_inventory',[
+                                    "id" => $inventory->id,
+                                    "name" => $inventory->name,
+                                    "stock" => $inventory->stock,
+                                    "price" => $inventory->price,
+                                ])
                             </div>
                         </div>
                     @endforeach
@@ -113,5 +121,6 @@
         }
     }
 </script>
+
 @endsection
 
