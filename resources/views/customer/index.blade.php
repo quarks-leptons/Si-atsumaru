@@ -61,25 +61,25 @@
 
                     <div class="col-md-8">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <b>Name</b>
                             </div>
-                            <div class="col-md-4"> 
+                            <div class="col-md-3"> 
                                 <b>Email</b>
                             </div>
-                            <div class="col-md-2"> 
+                            <div class="col-md-4"> 
                                 <b>Address</b>
                             </div>
                         </div>
                     @foreach ($customers as $customer)
                         <div class="row customer-card" >
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 {{$customer->name}}
                             </div>
-                            <div class="col-md-4"> 
+                            <div class="col-md-3"> 
                                 {{$customer->email}}
                             </div>
-                            <div class="col-md-2"> 
+                            <div class="col-md-4"> 
                                 {{$customer->address}}
                             </div>
                             <div class="col-md-2">
