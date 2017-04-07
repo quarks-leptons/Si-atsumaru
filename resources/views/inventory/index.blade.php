@@ -8,16 +8,10 @@
                 <div class="panel-heading"><h3>Inventory</h3></div>
 
                 <div class="panel-body">
-                    <div class="row">
-                        <label for="menu_name" class="col-md-2 control-label">Search Menu</label>
-                        <div class="col-md-10">
-                            <input id="menu_name" type="text" class="form-control" name="menu_name" onkeydown="validate(event)" autocomplete="off">
-                        </div>
-                    </div>
-                    <br>
-
                     <div class="col-md-4">
-                        <h4>Add Inventory</h4>
+                        <div class="page-header" style="margin-top: 20px;">
+                             <h4>Add New Inventory</h4>
+                        </div>
                         <form class="form-horizontal" role="form" method="POST" action="{{action('InventoryController@addInventory')}}">
                             <input name="_token" type="hidden" value="{{ csrf_token() }}"/>                            
                             <div class=form-group>
@@ -59,48 +53,48 @@
                         </form>
                     </div>  
 
-                    <div class="col-md-7">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <b>Name</b>
-                            </div>
-                            <div class="col-md-2"> 
-                                <b>Stock</b>
-                            </div>
-                            <div class="col-md-2"> 
-                                <b>Price</b>
+                    <div class="col-md-8">
+                        <div class="page-header" style="margin-top: 20px;">
+                                 <h4>List of Inventory</h4>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="menu_name" class="col-md-2 control-label">Search Menu</label>
+                            <div class="col-md-10">
+                                <input id="menu_name" type="text" class="form-control" name="menu_name" onkeydown="validate(event)" autocomplete="off">
                             </div>
                         </div>
-                    @foreach ($inventories as $inventory)
-                        <div class="row inventory-card" >
-                            <div class="col-md-6">
-                                {{$inventory->name}}
-                            </div>
-                            <div class="col-md-2"> 
-                                {{$inventory->stock}}
-                            </div>
-                            <div class="col-md-2"> 
-                                {{$inventory->price}}
-                            </div>
-                            <div class="col-md-1">
-                                @include('inventory.edit_inventory',[
-                                    "id" => $inventory->id,
-                                    "name" => $inventory->name,
-                                    "stock" => $inventory->stock,
-                                    "price" => $inventory->price,
-                                ])
-                            </div>
-                            <div class="col-md-1">
-                                <i class="fa fa-trash-o" style="color:red" aria-hidden="true"></i>
-                            </div>
 
+                        <div class="col-md-12 data_table">
+                            <table class="table table-condensed">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Stock</th> 
+                                    <th>Price</th>
+                                    <th></th>
+                                </tr>
+                                @foreach ($inventories as $inventory)
+                                <tr class="inventory-card">
+                                    <td>{{$inventory->name}}</td>
+                                    <td>{{$inventory->stock}}</td> 
+                                    <td>{{$inventory->price}}</td>
+                                    <td>
+                                         <div class="col-md-offset-4 col-md-4">
+                                            @include('inventory.edit_inventory',[
+                                                "id" => $inventory->id,
+                                                "name" => $inventory->name,
+                                                "stock" => $inventory->stock,
+                                                "price" => $inventory->price,
+                                            ])
+                                        </div>
+                                       <div class="col-md-4">
+                                            <i class="fa fa-trash-o" style="color:red" aria-hidden="true"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </table>
                         </div>
-                    @endforeach
                     </div>
-                </div>
-
-                <div class="panel-body">
-
                 </div>
             </div>
         </div>
