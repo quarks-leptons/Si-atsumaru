@@ -9,7 +9,7 @@
 
                 <div class="panel-body">
                     <div class="row">
-                        <label for="menu_name" class="col-md-2 control-label">Search Menu</label>
+                        <label for="menu_name" class="col-md-2 control-label">Search Promotion</label>
                         <div class="col-md-10">
                             <input id="menu_name" type="text" class="form-control" name="menu_name" onkeydown="validate(event)" autocomplete="off">
                         </div>
