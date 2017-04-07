@@ -15,7 +15,7 @@
                          <h4>Add New Menu</h4>
                         </div>
                         
-                        <form class="form-horizontal" role="form" method="POST" action="{{action('MenuController@addMenu')}}" onkeydown="validate_enter(event)">
+                        <form class="form-horizontal" role="form" method="POST" action="{{action('MenuController@addMenu')}}" onkeydown="validate_enter(event)" enctype="multipart/form-data">
                             <input name="_token" type="hidden" value="{{ csrf_token() }}"/>                            
                             <div class=form-group>
                                 <label for="name" class="col-md-2">Name</label>
@@ -54,15 +54,25 @@
                                     <div class="inventori col-md-3" style="display: inline-block; position: relative; margin:10px;">
                                          <div class="input-group">
                                           <span class="input-group-addon">
-                                                <input type="checkbox" aria-label="Checkbox for following text input"  onchange="inv_checked(event)" name="madeof" value="{{ $inventori->id }}" name="madeof[]">
+                                                <input type="checkbox" aria-label="Checkbox for following text input"  onchange="inv_checked(event)" value="{{ $inventori->id }}" name="madeof[]">
                                           </span>
                                           <span class="input-group-addon">{{ $inventori->name }}</span>
-                                          <input type="number" class="form-control" aria-label="Text input with checkbox" id="madeof_{{ $inventori->id }}" name="madeof_{{ $inventori->id }}" disabled="">
+                                          <input type="number" class="form-control" aria-label="Text input with checkbox" id="madeof_{{ $inventori->id }}" name="madeof_{{ $inventori->id }}" disabled="" value="0">
                                         </div>
                                                  
                                     </div>
                                     @endforeach
                                 </div>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <label for="exampleInputFile">Upload Image</label>
+                                </div>
+                                <div class="col-md-10">
+                                    <input type="file" name="image" id="exampleInputFile">
+                                    <p class="help-block">Add your menu's photo</p>
                                 </div>
                             </div>
                             <input type=submit class="btn btn-primary" value="Add New Menu" style="float:right;"/>
@@ -83,12 +93,16 @@
                     <div class="col-md-12 data_table">
                         <table class="table table-condensed">
                             <tr>
+                                <th>Image</th>
                                 <th>Name</th>
                                 <th>Price</th> 
                                 <th>Stock status</th>
                             </tr>
                             @foreach ($menus as $menu)
                             <tr class="menus-card">
+                                <td>
+                                    <img id="menu1" src="data:image/png;base64,{{ $menu->image }}" alt="Iced Tea" style="width: 100px; height: 100px;"class="img-thumbnail">
+                                </td>
                                 <td>{{$menu->name}}</td>
                                 <td>{{$menu->price}}</td> 
                                 <td><span class="label label-success">in stock</span></td>

@@ -8,21 +8,16 @@
                 <div class="panel-heading"><h3>Promotion</h3></div>
 
                 <div class="panel-body">
-                    <div class="row">
-                        <label for="menu_name" class="col-md-2 control-label">Search Promotion</label>
-                        <div class="col-md-10">
-                            <input id="menu_name" type="text" class="form-control" name="menu_name" onkeydown="validate(event)" autocomplete="off">
-                        </div>
-                    </div>
-                    <br>
 
                     <div class="col-md-4">
-                        <h4>Add Promotion</h4>
+                        <div class="page-header" style="margin-top: 20px;">
+                             <h4>Add New Promotion</h4>
+                        </div>
                         <form class="form-horizontal" role="form" method="POST" action="{{action('PromotionController@addPromotion')}}">
                             <input name="_token" type="hidden" value="{{ csrf_token() }}"/>                            
                             <div class=form-group>
-                                <label for="name" class="col-md-2">Name</label>
-                                <div class="col-md-10">
+                                <label for="name" class="col-md-3">Promo's Name</label>
+                                <div class="col-md-9">
                                     <input class="form-control" type="text" name="name" />
                                 </div>
                             </div>
@@ -33,8 +28,8 @@
                             @endif
 
                             <div class=form-group>
-                                <label for="discount" class="col-md-2">Discount</label>
-                                <div class="col-md-10">
+                                <label for="discount" class="col-md-3">Discount</label>
+                                <div class="col-md-9">
                                     <input class="form-control" type="number" name="discount" />
                                 </div>
                             </div>
@@ -45,8 +40,8 @@
                             @endif
 
                             <div class=form-group>
-                                <label for="name" class="col-md-2">Valid Until</label>
-                                <div class="col-md-10">
+                                <label for="name" class="col-md-3">Valid Until</label>
+                                <div class="col-md-9">
                                     <input class="form-control" type="datetime-local" name="valid_until" value="<?php date_default_timezone_set("Asia/Jakarta");echo date("Y-m-d")." ".date("h:i"); ?>"/>
                                 </div>
                             </div>
@@ -59,48 +54,48 @@
                         </form>
                     </div>  
 
-                    <div class="col-md-7">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <b>Name</b>
-                            </div>
-                            <div class="col-md-2"> 
-                                <b>Discount</b>
-                            </div>
-                            <div class="col-md-2"> 
-                                <b>Valid Until</b>
+                    <div class="col-md-8">
+                        <div class="page-header" style="margin-top: 20px;">
+                             <h4>List of Promotion</h4>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="menu_name" class="col-md-2 control-label">Search Promotion</label>
+                            <div class="col-md-10">
+                                <input id="menu_name" type="text" class="form-control" name="menu_name" onkeydown="validate(event)" autocomplete="off">
                             </div>
                         </div>
-                    @foreach ($promotions as $promotion)
-                        <div class="row promotion-card" >
-                            <div class="col-md-6">
-                                {{$promotion->name}}
-                            </div>
-                            <div class="col-md-2"> 
-                                {{$promotion->discount}}
-                            </div>
-                            <div class="col-md-2"> 
-                                {{$promotion->valid_until}}
-                            </div>
-                            <div class="col-md-1">
-                                @include('promotion.edit_promotion',[
-                                    "id" => $promotion->id,
-                                    "name" => $promotion->name,
-                                    "discount" => $promotion->discount,
-                                    "valid_until" => $promotion->valid_until,
-                                ])
-                            </div>
-                            <div class="col-md-1">
-                                <i class="fa fa-trash-o" style="color:red" aria-hidden="true"></i>
-                            </div>
 
+                        <div class="col-md-12 data_table">
+                            <table class="table table-condensed">
+                                <tr>
+                                    <th>Promo's Name</th>
+                                    <th>Discount</th> 
+                                    <th>Valid Until</th>
+                                    <th></th>
+                                </tr>
+                                @foreach ($promotions as $promotion)
+                                <tr class="inventory-card">
+                                    <td>{{$promotion->name}}</td>
+                                    <td>{{$promotion->discount}}</td> 
+                                    <td>{{$promotion->valid_until}}</td>
+                                    <td>
+                                         <div class="col-md-offset-4 col-md-4">
+                                            @include('promotion.edit_promotion',[
+                                                "id" => $promotion->id,
+                                                "name" => $promotion->name,
+                                                "discount" => $promotion->discount,
+                                                "valid_until" => $promotion->valid_until,
+                                            ])
+                                        </div>
+                                       <div class="col-md-4">
+                                            <i class="fa fa-trash-o" style="color:red" aria-hidden="true"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </table>
                         </div>
-                    @endforeach
                     </div>
-                </div>
-
-                <div class="panel-body">
-
                 </div>
             </div>
         </div>
