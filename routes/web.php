@@ -40,6 +40,7 @@ Route::get('/order/{id}', 'OrderController@detail')->where('id', '[0-9]+');
 Route::get('/menu', 'MenuController@index')->name('menu');
 Route::get('/menu/{id}', 'MenuController@detail')->where('id', '[0-9]+');
 Route::post('menu/add','MenuController@addMenu');
+Route::post('menu/edit','MenuController@editMenu');
 
 // Promotions
 Route::get('/promotion', 'PromotionController@index')->name('promotion');

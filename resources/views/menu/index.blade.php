@@ -97,6 +97,7 @@
                                 <th>Name</th>
                                 <th>Price</th> 
                                 <th>Stock status</th>
+                                <th></th>
                             </tr>
                             @foreach ($menus as $menu)
                             <tr class="menus-card">
@@ -106,6 +107,19 @@
                                 <td>{{$menu->name}}</td>
                                 <td>{{$menu->price}}</td> 
                                 <td><span class="label label-success">in stock</span></td>
+                                <td>
+                                    <div class="col-md-offset-4 col-md-4">
+                                            @include('menu.edit_menu',[
+                                                "id" => $menu->id,
+                                                "name" => $menu->name,
+                                                "image" => $menu->image,
+                                                "price" => $menu->price,
+                                            ])
+                                        </div>
+                                       <div class="col-md-4">
+                                            <i class="fa fa-trash-o" style="color:red" aria-hidden="true"></i>
+                                        </div>
+                                </td>
                             </tr>
                             @endforeach
                         </table>

@@ -70,6 +70,25 @@ class MenuController extends Controller
         return redirect()->action("MenuController@index");
     }
 
+    public function editMenu(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:40',
+            'price' => 'required|max:1000000',
+        ]);
+
+        $menu = Menu::Find($request->id);
+
+        $updates = [
+        'name' => $request->name,
+        'price' => $request->price,
+        ];
+
+        $menu->update($updates);
+
+        return redirect()->action("MenuController@index");
+    }
+
     /**
      * Show the menu detail
      *
