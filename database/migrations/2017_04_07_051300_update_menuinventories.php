@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMenusTable extends Migration
+class UpdateMenuinventories extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateMenusTable extends Migration
      */
     public function up()
     {
-        Schema::create('menus', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->double('price', 15, 8);
-            $table->timestamps();
+        Schema::table('menus_inventories', function (Blueprint $table) {
+            $table->integer('inv_stock_needed')->unsigned();
         });
     }
 
@@ -28,6 +25,6 @@ class CreateMenusTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('menus');
+        //
     }
 }
