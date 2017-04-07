@@ -12,6 +12,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/theme.css') }}" rel="stylesheet">
     <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/font-awesome.css') }}" rel="stylesheet">
     <link href="{{ asset('css/pos.css') }}" rel="stylesheet">
@@ -23,6 +24,7 @@
             'csrfToken' => csrf_token(),
         ]) !!};
     </script>
+    <script language="JavaScript" type="text/javascript" src="{{ asset('/js/jquery-3.2.0.slim.min.js') }}"></script>
 </head>
 <body>
     <div id="app">

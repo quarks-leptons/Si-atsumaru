@@ -8,16 +8,11 @@
                 <div class="panel-heading"><h3>Customer</h3></div>
 
                 <div class="panel-body">
-                    <div class="row">
-                        <label for="menu_name" class="col-md-2 control-label">Search Customer</label>
-                        <div class="col-md-10">
-                            <input id="menu_name" type="text" class="form-control" name="menu_name" onkeydown="validate(event)" autocomplete="off">
-                        </div>
-                    </div>
-                    <br>
 
                     <div class="col-md-4">
-                        <h4>Add New Customer</h4>
+                        <div class="page-header" style="margin-top: 20px;">
+                             <h4>Add New Customer</h4>
+                        </div>
                         <form class="form-horizontal" role="form" method="POST" action="{{action('CustomerController@addCustomer')}}">
                             <input name="_token" type="hidden" value="{{ csrf_token() }}"/>                            
                             <div class=form-group>
@@ -60,41 +55,47 @@
                     </div>  
 
                     <div class="col-md-8">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <b>Name</b>
-                            </div>
-                            <div class="col-md-3"> 
-                                <b>Email</b>
-                            </div>
-                            <div class="col-md-4"> 
-                                <b>Address</b>
+                        <div class="page-header" style="margin-top: 20px;">
+                             <h4>List of Customer</h4>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="menu_name" class="col-md-2 control-label">Search Customer</label>
+                            <div class="col-md-10">
+                                <input id="menu_name" type="text" class="form-control" name="menu_name" onkeydown="validate(event)" autocomplete="off">
                             </div>
                         </div>
-                    @foreach ($customers as $customer)
-                        <div class="row customer-card" >
-                            <div class="col-md-3">
-                                {{$customer->name}}
-                            </div>
-                            <div class="col-md-3"> 
-                                {{$customer->email}}
-                            </div>
-                            <div class="col-md-4"> 
-                                {{$customer->address}}
-                            </div>
-                            <div class="col-md-1">
-                                @include('customer.edit_customer',[
-                                    "id" => $customer->id,
-                                    "name" => $customer->name,
-                                    "email" => $customer->email,
-                                    "address" => $customer->address,
-                                ])
-                            </div>
-                           <div class="col-md-1">
-                                <i class="fa fa-trash-o" style="color:red" aria-hidden="true"></i>
-                            </div>
+
+
+                        <div class="col-md-12 data_table">
+                            <table class="table table-condensed">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th> 
+                                    <th>Address</th>
+                                    <th></th>
+                                </tr>
+                                @foreach ($customers as $customer)
+                                <tr class="customers-card">
+                                    <td> {{$customer->name}}</td>
+                                    <td>{{$customer->email}}</td> 
+                                    <td>{{$customer->address}}</td>
+                                    <td>
+                                        <div class="col-md-offset-4 col-md-4">
+                                            @include('customer.edit_customer',[
+                                                "id" => $customer->id,
+                                                "name" => $customer->name,
+                                                "email" => $customer->email,
+                                                "address" => $customer->address,
+                                            ])
+                                        </div>
+                                       <div class="col-md-4">
+                                            <i class="fa fa-trash-o" style="color:red" aria-hidden="true"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </table>
                         </div>
-                    @endforeach
                     </div>
                 </div>
 
