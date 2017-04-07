@@ -41,8 +41,8 @@ class MenuController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:40',
-            'stock' => 'required|max:1000000',
-            'price' => 'required|max:1000000'
+            'price' => 'required|max:1000000',
+            'madeof' => 'required'
         ]);
 
        if ($validator->fails()) {
@@ -50,31 +50,22 @@ class MenuController extends Controller
                 ->withInput()
                 ->withErrors($validator);
         }
+        Log::info('YAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYu');
+        
 
-        $menu_data = collect($request->only([
-            'name',
-            'stock',
-            'price'
-        ]))->all();
+        $tmpName  = $request->file('image')->getPathName();
+        $fileData = file_get_contents($tmpName);
+        $blob = base64_encode($fileData);
 
-        $menu = Menu::create($menu_data);
+        $menu = Menu::create(['name' => $request->name, 'price' => $request->price, 'image' => $blob]);
+        
         $menu_id = $menu->id;
         $madeof_menu =  $request->madeof;
-        Log::info('menuuuuuu');
-        Log::info(print_r($menu->id, true));
-        Log::info(print_r($madeof_menu, true));
 
         foreach ($madeof_menu as $inventory_id){
-            $menu_inventory = MenuInventories::create(['menu_id' => $menu_id, 'inventory_id' => $inventory_id]);
-        }  
-
-        /*$inventory_data = collect($request->only([
-            'name',
-            'stock',
-            'price'
-        ]))->all();
-
-        $inven = Inventory::create($inventory_data);*/
+            $madeof_ = 'madeof_' . $inventory_id;
+            $menu_inventory = MenuInventories::create(['menu_id' => $menu_id, 'inventory_id' => $inventory_id, 'inv_stock_needed' => $request->$madeof_]);
+        }
 
         return redirect()->action("MenuController@index");
     }
