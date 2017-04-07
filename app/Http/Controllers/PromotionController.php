@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Promotion;
+use Validator;
+
 
 class PromotionController extends Controller
 {
@@ -21,9 +24,56 @@ class PromotionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('promotion.index');
+        $promotions = Promotion::all();
+        return view('promotion.index')->with("promotions", $promotions);
+    }
+
+    public function addPromotion(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:40',
+            'discount' => 'required|numeric|max:100',
+            'valid_until' => 'required'
+        ]);
+
+       if ($validator->fails()) {
+            return redirect('/promotion')
+                ->withInput()
+                ->withErrors($validator);
+        }
+
+        $promotion_data = collect($request->only([
+            'name',
+            'discount',
+            'valid_until'
+        ]))->all();
+
+        $promo = Promotion::create($promotion_data);
+
+        return redirect()->action("PromotionController@index");
+    }
+
+    public function editPromotion(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|max:1000000',
+            'name' => 'required|max:40',
+            'discount' => 'required|max:100',
+        ]);
+
+        $promotion = Promotion::Find($request->id);
+
+        $updates = [
+        'name' => $request->name,
+        'discount' => $request->discount,
+        'valid_until' => $request->valid_until
+        ];
+
+        $promotion->update($updates);
+
+        return redirect()->action("PromotionController@index");
     }
 
     /**

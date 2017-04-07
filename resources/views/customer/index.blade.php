@@ -82,13 +82,16 @@
                             <div class="col-md-4"> 
                                 {{$customer->address}}
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 @include('customer.edit_customer',[
                                     "id" => $customer->id,
                                     "name" => $customer->name,
                                     "email" => $customer->email,
                                     "address" => $customer->address,
                                 ])
+                            </div>
+                           <div class="col-md-1">
+                                <i class="fa fa-trash-o" style="color:red" aria-hidden="true"></i>
                             </div>
                         </div>
                     @endforeach
