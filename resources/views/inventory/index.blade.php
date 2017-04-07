@@ -40,7 +40,7 @@
                             </div>
                             @if ($errors->has('stock'))
                                 <span class="help-block">
-                                    <strong>{{ $errors->first('name') }}</strong>
+                                    <strong>{{ $errors->first('stock') }}</strong>
                                 </span>
                             @endif
 

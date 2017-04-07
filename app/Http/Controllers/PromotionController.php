@@ -30,11 +30,11 @@ class PromotionController extends Controller
         return view('promotion.index')->with("promotions", $promotions);
     }
 
-    public function addpromotion(Request $request)
+    public function addPromotion(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:40',
-            'discount' => 'required|max:100',
+            'discount' => 'required|numeric|max:100',
             'valid_until' => 'required'
         ]);
 
@@ -55,7 +55,7 @@ class PromotionController extends Controller
         return redirect()->action("PromotionController@index");
     }
 
-    public function editpromotion(Request $request)
+    public function editPromotion(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'id' => 'required|max:1000000',
