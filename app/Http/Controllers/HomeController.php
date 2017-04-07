@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Inventory;
+use App\Constant;
 
 class HomeController extends Controller
 {
@@ -23,6 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $inventories = Inventory::where('stock','<=', Constant::InventoryDanger)->get();
+        return view('home')->with("inventories", $inventories);
     }
 }
