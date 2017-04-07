@@ -12,4 +12,11 @@ class Promotion extends Model
      * @var string
      */
     protected $table = 'promotions';
+    protected $primaryKey = 'id';
+	protected $fillable = [
+		'promotion_id',
+		'name',
+		'discount',
+		'valid_until'
+	];    
 }
