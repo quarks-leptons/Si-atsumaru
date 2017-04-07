@@ -10,8 +10,11 @@
 
                 <div class="panel-body">
 
-                    <div class="col-md-12">
-                        <h4>Add New Menu</h4>
+                    <div class="col-md-12" style="overflow: hidden;">
+                        <div class="page-header" style="margin-top: 20px;">
+                         <h4>Add New Menu</h4>
+                        </div>
+                        
                         <form class="form-horizontal" role="form" method="POST" action="{{action('MenuController@addMenu')}}" onkeydown="validate_enter(event)">
                             <input name="_token" type="hidden" value="{{ csrf_token() }}"/>                            
                             <div class=form-group>
@@ -44,7 +47,7 @@
                                     <div class="col-md-12">
                                         <div class="input-group">
                                             <input id="madeof_name" type="text" class="form-control input-sm" name="madeof_name" onkeydown="validate_madeof(event)" autocomplete="off">
-                                            <span class="input-group-addon"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
+                                            <span class="input-group-addon"><span class="fa fa-search" aria-hidden="true"></span></span>
                                         </div>
                                     </div>
                                     @foreach ($inventories as $inventori)
@@ -62,11 +65,15 @@
                                 </div>
                                 </div>
                             </div>
-                            <input type=submit class="btn btn-primary" value="Add Inventory"/>
+                            <input type=submit class="btn btn-primary" value="Add New Menu" style="float:right;"/>
                         </form>
                     </div>  
 
+                
                     <div class="col-md-12 search_bar">
+                     <div class="page-header" style="margin-top: 20px;">
+                         <h4>List of Menu</h4>
+                        </div>
                         <label for="menu_name" class="col-md-2 control-label">Search Menu</label>
                             <div class="col-md-10">
                                 <input id="menu_name" type="text" class="form-control" name="menu_name" onkeydown="validate(event)" autocomplete="off">
