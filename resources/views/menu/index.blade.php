@@ -25,19 +25,6 @@
                                     <strong>{{ $errors->first('name') }}</strong>
                                 </span>
                             @endif
-
-                            <div class=form-group>
-                                <label for="stock" class="col-md-2">Stock</label>
-                                <div class="col-md-10">
-                                    <input class="form-control" type="number" name="stock" />
-                                </div>
-                            </div>
-                            @if ($errors->has('stock'))
-                                <span class="help-block">
-                                    <strong>{{ $errors->first('name') }}</strong>
-                                </span>
-                            @endif
-
                             <div class=form-group>
                                 <label for="name" class="col-md-2">Price</label>
                                 <div class="col-md-10">
@@ -51,60 +38,58 @@
                             @endif
 
                             <div class=form-group>
-                                <label for="name" class="col-md-2">Made of</label>
-                                <div class="col-md-10" style="border: 1px solid; padding:10px;">
+                                <label for="name" class="col-md-2">Inventories</label>
+                                <div class="col-md-10">
+                                <div class="col-md-12" style="border: 1px solid #ccd0d2; border-radius: 4px; padding:10px;">
                                     <div class="col-md-12">
-                                        <input id="madeof_name" type="text" class="form-control input-sm" name="madeof_name" onkeydown="validate_madeof(event)" autocomplete="off">
+                                        <div class="input-group">
+                                            <input id="madeof_name" type="text" class="form-control input-sm" name="madeof_name" onkeydown="validate_madeof(event)" autocomplete="off">
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></span>
+                                        </div>
                                     </div>
                                     @foreach ($inventories as $inventori)
-                                        <div class="inventori" style="display: inline-block; position: relative; margin:10px;">
-                                            <input type="checkbox" value="{{ $inventori->id }}" name="madeof[]"> {{ $inventori->name }}
+                                    <div class="inventori col-md-3" style="display: inline-block; position: relative; margin:10px;">
+                                         <div class="input-group">
+                                          <span class="input-group-addon">
+                                                <input type="checkbox" aria-label="Checkbox for following text input"  onchange="inv_checked(event)" name="madeof" value="{{ $inventori->id }}" name="madeof[]">
+                                          </span>
+                                          <span class="input-group-addon">{{ $inventori->name }}</span>
+                                          <input type="number" class="form-control" aria-label="Text input with checkbox" id="madeof_{{ $inventori->id }}" name="madeof_{{ $inventori->id }}" disabled="">
                                         </div>
+                                                 
+                                    </div>
                                     @endforeach
+                                </div>
                                 </div>
                             </div>
                             <input type=submit class="btn btn-primary" value="Add Inventory"/>
                         </form>
-                        </br>
                     </div>  
 
-                    <div class="row">
-                    <label for="menu_name" class="col-md-2 control-label">Search Menu</label>
-                        <div class="col-md-10">
-                            <input id="menu_name" type="text" class="form-control" name="menu_name" onkeydown="validate(event)" autocomplete="off">
-                        </div>
+                    <div class="col-md-12 search_bar">
+                        <label for="menu_name" class="col-md-2 control-label">Search Menu</label>
+                            <div class="col-md-10">
+                                <input id="menu_name" type="text" class="form-control" name="menu_name" onkeydown="validate(event)" autocomplete="off">
+                            </div>
                     </div>
 
-                    <div class="row">
-                        </br>
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <b>Name</b>
-                                </div>
-                                <div class="col-md-4"> 
-                                    <b>Stock</b>
-                                </div>
-                                <div class="col-md-4"> 
-                                    <b>Price</b>
-                                </div>
-                            </div>
-                        @foreach ($menus as $menu)
-                            <div class="row menus-card" >
-                                <div class="col-md-4">
-                                    {{$menu->name}}
-                                </div>
-                                <div class="col-md-4"> 
-                                    {{$menu->stock}}
-                                </div>
-                                <div class="col-md-4"> 
-                                    {{$menu->price}}
-                                </div>
-                            </div>
-                        @endforeach
-                        </div>
+                    <div class="col-md-12 data_table">
+                        <table class="table table-condensed">
+                            <tr>
+                                <th>Name</th>
+                                <th>Price</th> 
+                                <th>Stock status</th>
+                            </tr>
+                            @foreach ($menus as $menu)
+                            <tr class="menus-card">
+                                <td>{{$menu->name}}</td>
+                                <td>{{$menu->price}}</td> 
+                                <td><span class="label label-success">in stock</span></td>
+                            </tr>
+                            @endforeach
+                        </table>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -149,6 +134,11 @@
           e.preventDefault();
           return false;
         }
+    }
+
+    function inv_checked(e){
+        var id = e.target.value.toLowerCase();
+        $('#madeof_'+id).prop('disabled', !($(e.target).is(":checked")));
     }
 </script>
 @endsection

@@ -15,6 +15,7 @@ class MenuInventories extends Model
     protected $primaryKey = 'id';
 	protected $fillable = [
 		'menu_id',
-		'inventory_id'
+		'inventory_id',
+        'inv_stock_needed'
 	];
 }
