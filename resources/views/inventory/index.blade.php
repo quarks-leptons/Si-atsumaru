@@ -59,9 +59,9 @@
                         </form>
                     </div>  
 
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <div class="row">
-                            <div class="col-md-7">
+                            <div class="col-md-6">
                                 <b>Name</b>
                             </div>
                             <div class="col-md-2"> 
@@ -73,7 +73,7 @@
                         </div>
                     @foreach ($inventories as $inventory)
                         <div class="row inventory-card" >
-                            <div class="col-md-7">
+                            <div class="col-md-6">
                                 {{$inventory->name}}
                             </div>
                             <div class="col-md-2"> 
@@ -90,6 +90,10 @@
                                     "price" => $inventory->price,
                                 ])
                             </div>
+                            <div class="col-md-1">
+                                <i class="fa fa-trash-o" style="color:red" aria-hidden="true"></i>
+                            </div>
+
                         </div>
                     @endforeach
                     </div>
