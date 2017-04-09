@@ -2,6 +2,26 @@
 	font-size: large;
 }
 
+.menu-image-small {
+	width: 25px;
+	height:25px;
+}
+
+.menu-image {
+	width: 100px;
+	height:100px;
+}
+
+.menu-image-big {
+	width: 200px;
+	height:200px;
+}
+
+.menu-helper {
+	font-size: smaller;
+	color: grey;
+}
+
 img.resize{
 	width: 450px;
 	height:200px;
@@ -11,4 +31,9 @@ hr.nospace{
 	padding: 0px;
 	margin: 0px;
 	border: solid 2px #d0d0d0;
+}
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
 }

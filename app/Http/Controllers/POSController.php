@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+// Models used
+use App\Customer;
+use App\Menu;
+use App\Promotion;
+
 class POSController extends Controller
 {
     /**
@@ -23,6 +28,17 @@ class POSController extends Controller
      */
     public function index()
     {
-        return view('pos.index');
+        // Get all customers
+        $customers = Customer::all();
+        // Get all menus
+        $menus = Menu::all();
+        // Get all promotions
+        $promotions = Promotion::all();
+
+        return view('pos.index', [
+                'customers' => $customers,
+                'menus' => $menus,
+                'promotions' => $promotions
+            ]);
     }
 }

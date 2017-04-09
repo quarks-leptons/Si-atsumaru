@@ -18,8 +18,11 @@
 
                             <div class="col-md-6">
                                 <select id="customer_name" name="customer_name" class="" required autofocus>
-                                    <option>Andi</option>
-                                    <option>Budi</option>
+                                    @if (count($customers) > 0)
+                                        @foreach ($customers as $customer)
+                                            <option>{{ $customer->name }}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
 
                                 @if ($errors->has('customer_name'))
@@ -68,19 +71,22 @@
                         </div>
 
                         <div id="menus" style="max-height:400px; min-height:400px; overflow-y: scroll;" class="row">
-                            <div class="col-md-3 menu-card">
-                                <img id="menu1" src="https://placehold.it/100x100" alt="Iced Tea" class="img-thumbnail" 
-                                style="cursor:pointer;" onclick="selectMenu(id)">
-                                <br/>
-                                <span>Iced Tea</span>
-                            </div>
-                            <div class="col-md-3 menu-card">
-                                <img id="menu2" src="https://placehold.it/100x100" alt="Cireng" class="img-thumbnail" 
-                                style="cursor:pointer;" onclick="selectMenu(id)">
-                                <br/>
-                                <span>Cireng</span>
-                            </div>
-                            
+                            @if (count($menus) > 0)
+                                @foreach ($menus as $menu)
+                                    <div class="col-md-3 menu-card">
+                                        <img id="menu{{ $menu->id }}" src="data:image/png;base64,{{ $menu->image }}" alt="{{ $menu->name }}" class="img-thumbnail menu-image" style="cursor:pointer;" onclick="selectMenu({{ $menu->id }})" price="{{$menu->price}}">
+                                        <br/>
+                                        <span>{{ $menu->name }}</span>
+                                        <span>{{ $menu->price }}</span>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="col-md-12">
+                                    <p class="menu-helper">There are no menus in Atsumaru yet.
+                                    Please add new menu <a href="{{ route('menu') }}">here</a></p>
+                                </div>
+                            @endif
+                                                       
                         </div>
                     </div>
                 </div>
@@ -88,32 +94,18 @@
                 <div id="form-select-menu-2" style="display: none;">
                     <div class="panel-body">
                         <div class="row">
-                            <div class="form-group">
-                                <label for="menu_name" class="col-md-1 control-label">
-                                    <span onclick="selectMenu(id)" style="cursor: pointer;"><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
-                                </label>
-                                <div class="col-md-8">
-                                    <span class="menuTitle" id="menuSelected"></span>
-                                    |
-                                    <span class="menuTitle" id="menuPriceSelected">Rp10.000,00</span>
-                                </div>
-                                <div class="col-md-3">
-                                    <button class="btn btn-default">Add to Order</button>
-                                </div>
+                            <div class="col-md-12">
+                                <span onclick="selectMenu(id)" style="cursor: pointer;"><i class="fa fa-chevron-left" aria-hidden="true"></i> Back</span>
+                                <button class="btn btn-default pull-right" onclick="addToOrder()">Add to Order</button>
+                                <span class="pull-right menuTitle" id="menuSelected" style="margin-right: 10px; margin-top: 5px;"></span>
+                                <hr />
                             </div>
-                            <div class="col-md-12"><hr></div>
                         </div>
 
-                        <div id="menus" style="max-height:400px; min-height:400px; overflow-y: scroll;" class="row">
-                            <div class="col-md-4">
-                                <img id="imgMenuSelected" class="img-thumbnail">
-                            </div>      
-
-                            <div class="col-md-8">
-                                <p>Price: Rp10.000,00</p>
-                                <p>Stock: 10 buah</p>
+                        <div id="menus" style="max-height:350px; min-height:350px; overflow-y: scroll;" class="row">
+                            <div class="col-md-12">
+                                <label for="price" class="col-md-12 control-label">Price: Rp <span id="priceMenuSelected"></span>,00</label>
                             </div>
-
                             <div class="col-md-12">
                                 <label for="quantity" class="col-md-12 control-label">Quantity</label>
                                 <div class="col-md-1">
@@ -133,21 +125,20 @@
 
                             <div class="col-md-12">
                                 <label class="col-md-12 control-label">Discount</label>
-                                <div class="col-md-5 col-md-offset-1">
-                                    <div class="checkbox">
-                                        <input type="checkbox"> Discount 1
+                                @if (count($promotions) > 0)
+                                    @foreach ($promotions as $promotion)
+                                        <div class="col-md-5 col-md-offset-1">
+                                            <div>
+                                                <input class="promotion-checkbox" type="checkbox" id="promotion{{ $promotion->id }}" discount="{{ $promotion->discount }}" onclick="onClickPromotion()" /> {{ $promotion->name }} ({{ $promotion->discount }}%)
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <div class="col-md-12">
+                                        <p class="menu-helper">There are no promotions in Atsumaru yet.
+                                        To add new promotions click <a href="{{ route('promotion') }}">here</a></p>
                                     </div>
-                                </div>
-                                <div class="col-md-5 col-md-offset-1">
-                                    <div class="checkbox">
-                                        <input type="checkbox"> Discount 1
-                                    </div>
-                                </div>
-                                <div class="col-md-5 col-md-offset-1">
-                                    <div class="checkbox">
-                                        <input type="checkbox"> Discount 1
-                                    </div>
-                                </div>                        
+                                @endif                     
                             </div>
 
                             <div class="col-md-12">
@@ -156,6 +147,12 @@
                                     <textarea style="resize:none;" id="description" name="description" rows="5" cols="50"></textarea>
                                 </div>  
                             </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                Total: Rp<span class="menuTitle" id="totalPrice"></span>,00
+                            </div>                                
                         </div>
                     </div> <!-- End of Form Select Menu 2 -->
                 </div>          
@@ -171,13 +168,40 @@
         $("#form-select-menu-1").toggle();
         $("#form-select-menu-2").toggle();
         if(menuId != "Back") {
-            alt = $("#"+menuId).attr("alt")
-            src = $("#"+menuId).attr("src")
+            alt = $("#menu"+menuId).attr("alt")
+            src = $("#menu"+menuId).attr("src")
+            price = $("#menu"+menuId).attr("price")
             // console.log(alt)
             // console.log(src)
             $("#menuSelected").text(alt)
             $("#imgMenuSelected").attr("src",src)
+            $("#priceMenuSelected").text(price)
+            $("#totalPrice").text(price)
         }
+    }
+
+    function onClickPromotion() {
+        $(".promotion-checkbox").each(function(index) {
+            var id = $( this ).attr('id')
+            // console.log(id)
+            total_discount = 0
+            if(document.getElementById(id).checked) {
+                var discount = $( this ).attr('discount')
+                console.log('id: '+id+ ' | discount: '+discount)
+                total_discount += discount
+            }
+            calculateTotalPrice(total_discount)
+        });
+    }
+
+    function calculateTotalPrice(total_discount) {
+        original_price = $("#priceMenuSelected").text()
+        discounted_price = original_price - (original_price*total_discount/100)
+        $("#totalPrice").text(discounted_price)
+    }
+
+    function addToOrder() {
+
     }
 
 
