@@ -51,6 +51,7 @@
                                 </tbody>
                             </table>
                             <input type="hidden" name="count_menu" id="count_menu" value="0">
+                            <input type="hidden" name="total_price_in_form" id="total_price_in_form" value="0">
 
                     </form> <!-- End of Form New Order -->
                     <div class="form-group" style="position: absolute; bottom: 20px;">
@@ -262,6 +263,7 @@
 
     function setTotalOrderPrice(price) {
         $("#totalOrderPrice").text(price)
+        $('#total_price_in_form').val(price)
     }
 
 
@@ -385,7 +387,7 @@
         no = countNewItems() + 1
         $('#count_menu').val(no)
         id = getRandomInt(0,1000000)
-        delete_button = '<span onclick="removeFromList(id)" id="'+id+'" style="cursor: pointer;"><i class="fa fa-trash" aria-hidden="true"></i></span>'
+        delete_button = '<span onclick="removeFromList(id)" id="'+id+'" no="'+no+'" style="cursor: pointer;"><i class="fa fa-trash" aria-hidden="true"></i></span>'
         edit_button = '<span onclick="editMenu(id)" id="'+id+'" style="cursor: pointer;"><i class="fa fa-pencil" aria-hidden="true"></i></span>'
 
         td_no = '<td>'+no+'</td>'
@@ -395,7 +397,7 @@
         td_total = '<td>'+total_price+'</td>'
         td_description = '<td>'+description+'</td>'
         td_edit_button = '<td>'+edit_button+'</td>'
-        td_delete_button = '<td>'+delete_button+'</td>'
+        td_delete_button = '<td>'+delete_button+'<span style="display:none;">'+menu_id+'</span>'+'</td>'
 
         new_item = '<tr class="new-item">'
             +td_no
@@ -410,7 +412,7 @@
 
         $('#purchases').append(new_item)
 
-        new_hidden = '<input type="hidden" name="menu'+no+'" id="menu'+no+'" value="'+menu_id+';'+quantity+';'+promotions.join()+';'+description+'"></input>'
+        new_hidden = '<input type="hidden" class="laravel-input-menu" name="menu'+no+'" id="menu'+no+'" value="'+menu_id+';'+quantity+';'+promotions.join()+';'+description+'"></input>'
         $('#purchases').append(new_hidden)
     }
 
@@ -420,6 +422,14 @@
         row.remove()
         rewriteTableNo()
         updateTotalOrderPrice()
+
+        menu_id = row.children().eq(7).children(1).text()
+        $('#menu'+menu_id).remove()
+        $(".laravel-input-menu").each(function(index) {
+            $(this).attr('name', 'menu'+count)
+            $(this).attr('id', 'menu'+count)
+            count++
+        });
     }
 
     function saveChanges() {
@@ -429,6 +439,10 @@
                 changed_item = $(this)
             }
         });
+        menu_id = $('#menu_id').attr('value')
+        no = changed_item.children().eq(0).text()
+        // console.log(no)
+        $('#menu'+no).val(menu_id+';'+getQuantity()+';'+getPromotions().join()+';'+getDescription())
         td_quantity = changed_item.children().eq(3)
         td_quantity.text(getQuantity())
         td_total_price = changed_item.children().eq(4)
@@ -443,6 +457,8 @@
         selectize.enable()
 
         updateTotalOrderPrice()
+
+        hidden = $('#menu')
     }
 
     function rewriteTableNo() {
@@ -451,6 +467,7 @@
             $(this).children(':first').text(count)
             count++
         });
+        count = 1;
     }
 
     function colorBlueTableRow(id) {
@@ -501,7 +518,7 @@
         $('#save_changes').show()
         $('#add_to_order').hide()
 
-        row = $('#'+id).parent().parent()        
+        row = $('#'+id).parent().parent()
         row.children().each(function(index) {
             if(index == 1) { // menu name
                 menu_name = $(this).text()
@@ -517,6 +534,9 @@
             }
             else if(index == 5) { // description
                 description = $(this).text()
+            } 
+            else if(index == 7) { // menu_id
+                menuId = $(this).children().eq(1).text()
             } 
         })
         $('#menu_id').attr('value', menuId)

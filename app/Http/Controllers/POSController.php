@@ -51,6 +51,7 @@ class POSController extends Controller
             // HANDLE ORDER (only 1)
             $order = new Order;
 
+            $order->total_discount = $request->input('total_price_in_form');
             $order->customer_id = $customer_id;
             $order->status = 0; // STATUS 0: new order
 
@@ -90,6 +91,6 @@ class POSController extends Controller
             }
         }
 
-        // return redirect()->action("POSController@index");
+        return redirect()->action("OrderController@index");
     }
 }
