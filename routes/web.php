@@ -49,4 +49,4 @@ Route::post('promotion/add','PromotionController@addPromotion');
 Route::post('promotion/edit','PromotionController@editPromotion');
 // POS
 Route::get('/pos', 'POSController@index')->name('pos');
-
+Route::post('pos/add','POSController@addOrder')->name('addOrder');

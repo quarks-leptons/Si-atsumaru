@@ -10,7 +10,7 @@
 
                 <div class="panel-body" style="max-height:500px; min-height:500px">
                     <!-- Form New Order -->
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('login') }}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ route('addOrder') }}" id="addOrderForm">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('customer_name') ? ' has-error' : '' }}">
@@ -20,7 +20,7 @@
                                 <select id="customer_name" name="customer_name" class="" required autofocus>
                                     @if (count($customers) > 0)
                                         @foreach ($customers as $customer)
-                                            <option>{{ $customer->name }}</option>
+                                            <option class="old_customer" value="{{ $customer->id }}">{{ $customer->name }}</option>
                                         @endforeach
                                     @endif
                                 </select>
@@ -50,19 +50,19 @@
                                 <tbody id="purchases">
                                 </tbody>
                             </table>
-
-                        <div class="form-group" style="position: absolute; bottom: 20px;">
-                            <div class="col-md-6">
-                                <button class="btn btn-primary" id="save_order">
-                                    Save Order
-                                </button>
-                            </div>
-                            <div class="col-md-6">
-                                Total: Rp0,00
-                            </div>
-                        </div>
+                            <input type="hidden" name="count_menu" id="count_menu" value="0">
 
                     </form> <!-- End of Form New Order -->
+                    <div class="form-group" style="position: absolute; bottom: 20px;">
+                        <div class="col-md-6">
+                            <button class="btn btn-primary" id="save_order" onclick="saveOrder()">
+                                Save Order
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            Total: Rp<span id="totalOrderPrice">0</span>,00
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -109,6 +109,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <span onclick="selectMenu(id)" style="cursor: pointer;"><i class="fa fa-chevron-left" aria-hidden="true"></i> Back</span>
+                                <span id="menu_id"></span>
                                 <button id="add_to_order" class="btn btn-default pull-right" onclick="addToOrder()">Add to Order</button>
                                 <button id="save_changes" class="btn btn-success pull-right" onclick="saveChanges()">Save Changes</button>
                                 <span class="pull-right menuTitle" id="menuSelected" style="margin-right: 10px; margin-top: 5px;"></span>
@@ -187,11 +188,12 @@
             var id = $( this ).attr('id')
             // console.log(id)
             if(document.getElementById(id).checked) {
-                var discount = $( this ).attr('discount')
+                var discount = parseInt($( this ).attr('discount'))
                 // console.log('id: '+id+ ' | discount: '+discount)
                 total_discount += discount
             }
         });
+        console.log(total_discount)
         return total_discount
     }
 
@@ -213,6 +215,20 @@
 
     function getOriginalPrice() {
         return $("#priceMenuSelected").text()   
+    }
+
+    function getPromotions() {
+        var discounts = []
+        $(".promotion-checkbox").each(function(index) {
+            var id = $( this ).attr('id')
+            // console.log(id)
+            if(document.getElementById(id).checked) {
+                id = id.slice(9)
+                console.log('id: '+id)
+                discounts.push(id)
+            }
+        });
+        return discounts
     }
 
     function countNewItems() {
@@ -240,6 +256,17 @@
         $("#totalPrice").text(total_price)
     }
 
+    function setDescription(description) {
+        $("#description").val(description)
+    }
+
+    function setTotalOrderPrice(price) {
+        $("#totalOrderPrice").text(price)
+    }
+
+
+
+
     function toggleForm() {
         $("#form-select-menu-1").toggle();
         $("#form-select-menu-2").toggle();
@@ -258,10 +285,12 @@
             price = $("#menu"+menuId).attr("price")
             // console.log(alt)
             // console.log(src)
+            $('#menu_id').attr('value', menuId)
             setMenuName(alt)
             setMenuImgSrc(src)
             setOriginalPrice(price)
             setTotalPrice(price)
+            setDescription("")
             // Uncheck all promotions checkboxs
             $(".promotion-checkbox").each(function(index) {
                 $(this).prop('checked', false)
@@ -274,16 +303,55 @@
             resetColorTableRow()
             showAllButtons()
             $('#save_order').removeClass('disabled')
-            $('#customer_name').removeClass('disabled')
             var selectize = $select[0].selectize;
             selectize.enable()
         }
+    }
+
+    function saveOrder() {
+        customer_name = $('#customer_name')
+        // console.log(customer_name)
+        if(customer_name.val() == "") {
+            console.log("Customer name empty")
+        }
+        else {
+            count = 0
+            $(".new-item").each(function(index) {
+                count++
+            });
+            if(count == 0) {
+                console.log("Order is empty")
+            }
+            else {
+                $('#addOrderForm').submit();
+                // if(customer_name.hasClass('old_customer')) {
+                //     console.log("Old customer")
+                // }
+                // else {
+                //     console.log("New customer")   
+                // }
+            }
+        }
+    }
+
+    // Source: http://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
     function updateTotalPrice() {
         total_discount = getTotalDiscount()
         quantity = getQuantity()
         calculateTotalPrice(total_discount, quantity)
+    }
+
+    function updateTotalOrderPrice() {
+        sum = 0;
+        $(".new-item").each(function(index) {
+            price = $(this).children().eq(4)
+            sum += parseInt(price.text())
+        });
+        setTotalOrderPrice(sum)
     }
 
     function calculateTotalPrice(total_discount, quantity) {
@@ -294,15 +362,18 @@
     }
 
     function addToOrder() {
+        menu_id = $('#menu_id').attr('value')
         menu_name = getMenuName()
         original_price = getOriginalPrice()
         quantity = getQuantity()
         total_price = getTotalPrice()
+        promotions = getPromotions()
         description = getDescription()
         // console.log(quantity)
         // console.log(total_price)
         // console.log(description)
-        addToList(menu_name, original_price, quantity, total_price, description)
+        addToList(menu_id, menu_name, original_price, quantity, total_price, description, promotions)
+        updateTotalOrderPrice()
         toggleForm()
     }
 
@@ -310,8 +381,9 @@
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    function addToList(menu_name, original_price, quantity, total_price, description) {
+    function addToList(menu_id, menu_name, original_price, quantity, total_price, description, promotions) {
         no = countNewItems() + 1
+        $('#count_menu').val(no)
         id = getRandomInt(0,1000000)
         delete_button = '<span onclick="removeFromList(id)" id="'+id+'" style="cursor: pointer;"><i class="fa fa-trash" aria-hidden="true"></i></span>'
         edit_button = '<span onclick="editMenu(id)" id="'+id+'" style="cursor: pointer;"><i class="fa fa-pencil" aria-hidden="true"></i></span>'
@@ -337,6 +409,9 @@
             +'</tr>'
 
         $('#purchases').append(new_item)
+
+        new_hidden = '<input type="hidden" name="menu'+no+'" id="menu'+no+'" value="'+menu_id+';'+quantity+';'+promotions.join()+';'+description+'"></input>'
+        $('#purchases').append(new_hidden)
     }
 
     function removeFromList(id) {
@@ -344,6 +419,30 @@
         row = $('#'+id).parent().parent()
         row.remove()
         rewriteTableNo()
+        updateTotalOrderPrice()
+    }
+
+    function saveChanges() {
+        // find item being changed
+        $(".new-item").each(function(index) {
+            if($(this).hasClass('info')) {
+                changed_item = $(this)
+            }
+        });
+        td_quantity = changed_item.children().eq(3)
+        td_quantity.text(getQuantity())
+        td_total_price = changed_item.children().eq(4)
+        td_total_price.text(getTotalPrice())
+        td_description = changed_item.children().eq(5)
+        td_description.text(getDescription())
+        toggleForm()
+        resetColorTableRow()
+        showAllButtons()
+        $('#save_order').removeClass('disabled')
+        var selectize = $select[0].selectize;
+        selectize.enable()
+
+        updateTotalOrderPrice()
     }
 
     function rewriteTableNo() {
@@ -389,7 +488,9 @@
     function editMenu(id) {
         // console.log("editMenu: "+id)
         colorBlueTableRow(id)
-        toggleForm()
+        if($("#form-select-menu-1").is(":visible")) {
+            toggleForm()
+        }
 
         // Disable all other buttons
         hideAllButtons()
@@ -414,12 +515,16 @@
             else if(index == 4) { // total_price
                 total_price = $(this).text()
             }
-              
+            else if(index == 5) { // description
+                description = $(this).text()
+            } 
         })
+        $('#menu_id').attr('value', menuId)
         setMenuName(menu_name)
         // setMenuImgSrc(src)
         setOriginalPrice(original_price)
         setTotalPrice(total_price)
+        setDescription(description)
         // // Uncheck all promotions checkboxs
         // $(".promotion-checkbox").each(function(index) {
         //     $(this).prop('checked', false)
